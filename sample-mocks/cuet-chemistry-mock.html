@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>CUET UG Chemistry Mock · Hard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(-45deg, #fef3c7, #fef9c3, #ffedd5, #fff7ed);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #1e293b;
+      overflow-x: hidden;
+      transition: background 0.2s, color 0.2s;
+      opacity: 0;
+      animation: pageFadeIn 0.5s ease-out forwards;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes pageFadeIn {
+      0% { opacity: 0; transform: translateY(6px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    body.dark {
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+    body.dark .card-modern {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(16px);
+      border-color: rgba(51, 65, 85, 0.6);
+    }
+    body.dark .card-header {
+      background: transparent;
+      border-bottom-color: #334155;
+      color: #f1f5f9;
+    }
+    body.dark .option-item {
+      background: #1e293b;
+      border-color: #334155;
+      color: #e2e8f0;
+    }
+    body.dark .option-item.active-opt {
+      background: linear-gradient(135deg, #92400e, #b45309);
+      color: white;
+    }
+    body.dark .q-text {
+      background: #1e293b;
+      border-left-color: #f59e0b;
+      color: #f8fafc;
+    }
+    body.dark .pal-num {
+      background: #334155;
+      color: #f1f5f9;
+    }
+    body.dark .analysis-box {
+      background: #0f172a;
+    }
+    body.dark .correct-opt {
+      background: #064e3b !important;
+      border-color: #10b981 !important;
+      color: #ccf0e6;
+    }
+    body.dark .wrong-opt {
+      background: #7f1a1a !important;
+      border-color: #f87171 !important;
+      color: #ffe0e0;
+    }
+    body.dark .notice-banner {
+      background: #2d1f00;
+      color: #ffedd5;
+      border-left-color: #f59e0b;
+    }
+    :root {
+      --chem-primary: #b45309;
+      --chem-accent: #d97706;
+      --chem-success: #f59e0b;
+      --chem-danger: #ef4444;
+      --chem-gold: #fbbf24;
+    }
+    .card-modern {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 18px 20px;
+      background: transparent;
+      border-bottom: 1px solid #fef3c7;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .loading-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .loader-spinner {
+      width: 56px; height: 56px;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid var(--chem-accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .app-header {
+      background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo i { font-size: 1.8rem; color: #facc15; }
+    .logo h2 { font-size: 1rem; color: white; font-weight: 700; }
+    .badge-user {
+      background: #451a03;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+    }
+    .version-tag {
+      font-size: 0.7rem;
+      background: #451a03;
+      border-radius: 20px;
+      padding: 2px 10px;
+      color: #facc15;
+      margin-left: 8px;
+    }
+    .moving-headline {
+      background: #facc15;
+      color: #1e293b;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 30px;
+      margin: 8px 0;
+      text-align: center;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: moveHeadline 12s linear infinite;
+    }
+    @keyframes moveHeadline {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .container { max-width: 700px; margin: 0 auto; padding: 16px; }
+    .welcome-hero { text-align: center; padding: 28px 20px; }
+    .welcome-hero i {
+      font-size: 4rem;
+      color: var(--chem-primary);
+      background: #fef3c7;
+      padding: 20px;
+      border-radius: 60px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(180, 83, 9, 0.2); }
+      70% { box-shadow: 0 0 0 12px rgba(180, 83, 9, 0); }
+      100% { box-shadow: 0 0 0 0; }
+    }
+    .input-group {
+      background: #f1f5f9;
+      border-radius: 60px;
+      padding: 4px 18px;
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      border: 1px solid #e2e8f0;
+    }
+    .input-group input {
+      border: none; background: transparent; padding: 14px 12px;
+      font-size: 1rem; flex: 1; outline: none; font-weight: 500;
+    }
+    .btn-block {
+      width: 100%; padding: 15px; border-radius: 50px;
+      font-weight: 700; font-size: 1rem; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #92400e, #b45309);
+      color: white; transition: all 0.2s ease;
+    }
+    .btn-block:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(180, 83, 9, 0.3); }
+    .btn-block:active { transform: scale(0.96); }
+    .btn-outline { background: white; border: 1.5px solid #cbd5e1; color: #1e293b; }
+    body.dark .btn-outline { background: #1e293b; border-color: #475569; color: #f1f5f9; }
+    .flex-btns { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .flex-btns button { flex: 1; margin-top: 0; }
+    .question-panel { padding: 20px; }
+    .q-text {
+      font-size: 1.1rem; font-weight: 500; line-height: 1.6;
+      background: linear-gradient(135deg, #fffbeb, #fef3c7);
+      padding: 20px; border-radius: 24px; margin: 16px 0;
+      border-left: 6px solid #f59e0b;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+      white-space: pre-wrap;
+    }
+    .chapter-tag {
+      display: inline-block; background: #b45309; color: white;
+      padding: 4px 14px; border-radius: 40px; font-size: 0.75rem;
+      font-weight: 600; margin-bottom: 8px;
+    }
+    .lang-btn-group { display: flex; gap: 8px; margin-bottom: 10px; }
+    .lang-btn-sm {
+      padding: 6px 16px; border-radius: 30px; border: none;
+      background: #e2e8f0; font-weight: 600; font-size: 0.8rem; cursor: pointer;
+    }
+    .lang-btn-sm.active-lang { background: var(--chem-primary); color: white; }
+    .option-item {
+      background: #ffffff; border-radius: 18px; padding: 14px 18px;
+      margin-bottom: 12px; display: flex; align-items: center; gap: 16px;
+      border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s ease;
+    }
+    .option-item:hover { transform: scale(1.02); border-color: #b45309; }
+    .option-item.active-opt {
+      background: linear-gradient(135deg, #92400e, #b45309);
+      color: white; transform: scale(1.03);
+    }
+    .correct-opt { background: #d1fae5 !important; border: 2px solid #10b981 !important; cursor: default; }
+    .wrong-opt { background: #fee2e2 !important; border: 2px solid #ef4444 !important; cursor: default; }
+    .opt-letter {
+      font-weight: 800; background: white; width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center; border-radius: 14px;
+    }
+    .action-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; margin-bottom: 12px; }
+    .action-btn {
+      flex: 1; padding: 14px 8px; border-radius: 50px; background: #f1f5f9;
+      border: none; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s;
+    }
+    .primary-btn { background: var(--chem-primary); color: white; }
+    .timer-circle {
+      background: radial-gradient(circle at center, #111827, #000);
+      border: 2px solid #facc15; padding: 10px 20px; border-radius: 50px;
+      font-family: monospace; font-size: 1.4rem; font-weight: 800;
+      color: #facc15; box-shadow: 0 0 15px rgba(250, 204, 21, 0.5);
+    }
+    .palette-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; padding: 16px; }
+    .pal-num {
+      background: #f1f5f9; border-radius: 12px; aspect-ratio: 1/1;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.75rem; cursor: pointer; transition: all 0.2s ease;
+    }
+    .pal-num:hover { transform: scale(1.1); }
+    .pal-answered { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+    .pal-marked { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+    .pal-visited { background: #94a3b8; color: white; }
+    .pal-current { border: 3px solid var(--chem-primary); background: #fef3c7; transform: scale(1.02); }
+    .pal-wrong-review { background: #ef4444 !important; color: white !important; }
+    .hidden { display: none !important; }
+    .legend { display: flex; justify-content: space-evenly; padding: 12px; border-top: 1px solid #fef3c7; font-size: 0.7rem; flex-wrap: wrap; }
+    .legend-color { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+    .analysis-box { background: #fef3c7; border-radius: 24px; padding: 12px; margin: 12px; }
+    .dark-toggle {
+      background: rgba(255, 255, 255, 0.15); border: none; color: white;
+      padding: 8px 12px; border-radius: 40px; font-size: 0.9rem; cursor: pointer; font-weight: 600;
+    }
+    .notice-banner {
+      background: #fef3c7; border-left: 6px solid #f59e0b; padding: 12px 16px;
+      border-radius: 20px; margin: 12px 0; font-weight: 500; display: flex;
+      align-items: center; gap: 12px; font-size: 0.85rem;
+    }
+    #floatingNav { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 999; }
+    #floatingNav button {
+      width: 50px; height: 50px; border-radius: 50%; border: none;
+      background: #92400e; color: white; font-size: 1.2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); cursor: pointer; transition: transform 0.2s;
+    }
+    #floatingNav button:active { transform: scale(0.9); }
+    .result-highlight {
+      font-size: 2rem; font-weight: 800; color: #f59e0b;
+      text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    }
+    body.dark .lang-btn-sm { background: #334155; color: #e2e8f0; }
+    body.dark .lang-btn-sm.active-lang { background: var(--chem-primary); color: white; }
+    @media (max-width: 480px) {
+      .timer-circle { font-size: 1.2rem; padding: 6px 14px; }
+      .q-text { font-size: 1rem; }
+      .btn-block { padding: 14px; }
+      .card-header { flex-direction: column; align-items: stretch; }
+      #floatingNav button { width: 45px; height: 45px; }
+      .palette-grid { grid-template-columns: repeat(8, 1fr); }
+    }
+    @media (min-width: 769px) {
+      .container { max-width: 800px; padding: 24px; }
+      .question-panel { padding: 24px; }
+      .q-text { font-size: 1.2rem; }
+      .option-item { padding: 16px 24px; }
+      .action-row button { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+<div id="loadingOverlay" class="loading-overlay hidden">
+  <div class="loader-spinner"></div>
+  <div id="loadingMessage" style="color:white; margin-top:20px;">Loading...</div>
+</div>
+
+<div class="app-header">
+  <div class="logo"><i class="fas fa-flask"></i><h2>CUET UG Chemistry 2026 <span class="version-tag"><i class="fas fa-bolt"></i> Mock 1</span></h2></div>
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <button id="darkModeToggle" class="dark-toggle"><i class="fas fa-moon"></i></button>
+    <div class="badge-user" id="headerNameDisplay"><i class="fas fa-id-card"></i> Candidate</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="moving-headline">
+    ⚗️ उच्च स्तरीय रसायन विज्ञान · 40 प्रश्न | +5 / -1 | 45 मिनट · भौतिक, कार्बनिक, अकार्बनिक ⚗️
+  </div>
+
+  <div id="welcomePanel" class="card-modern">
+    <div class="welcome-hero">
+      <i class="fas fa-flask"></i>
+      <h2 style="margin: 16px 0;">CUET UG Chemistry Mock 1<br>Hard Level (Latest Pattern)</h2>
+      <p style="color:#475569;">⚗️ 40 प्रश्न | +5 / -1 | 45 मिनट | Physical · Organic · Inorganic</p>
+      <div class="notice-banner">
+        <i class="fas fa-info-circle" style="font-size:1.2rem;"></i>
+        <span>⚠️ CUET पैटर्न आधारित। Visit: <a href="https://cuetwallah7-bot.github.io/TESTMASTER/" target="_blank" style="color:#92400e; font-weight:700;">TESTMASTER</a></span>
+      </div>
+      <div class="notice-banner" style="background:#fff7ed; border-left-color:#f97316;">
+        <i class="fas fa-star" style="color:#f97316;"></i>
+        <span>🚀 और मॉक टेस्ट: <a href="https://cuetwallah7-bot.github.io/TESTMASTER/" target="_blank" style="color:#c2410c; font-weight:700;">TESTMASTER Platform</a></span>
+      </div>
+      <div class="input-group"><i class="fas fa-user-pen"></i><input type="text" id="candidateNameField" placeholder="Enter Roll No. / Name" autocomplete="off"></div>
+      <button id="proceedToInstBtn" class="btn-block"><i class="fas fa-arrow-right"></i> Start Exam</button>
+      <div class="flex-btns">
+        <button id="viewLiveLeaderboardBtn" class="btn-block btn-outline"><i class="fas fa-trophy"></i> Leaderboard</button>
+        <button id="quickStatsBtn" class="btn-block btn-outline"><i class="fas fa-chart-line"></i> My Stats</button>
+      </div>
+      <div id="resumeSection" class="hidden" style="margin-top: 16px;">
+        <button id="resumeMockBtn" class="btn-block" style="background:#d97706;"><i class="fas fa-play-circle"></i> Resume Exam</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="instructionsPanel" class="card-modern hidden">
+    <div class="card-header"><i class="fas fa-circle-info"></i> परीक्षा निर्देश (Chemistry Hard 2026)</div>
+    <div style="padding: 20px;">
+      <ul style="margin-left: 20px; line-height: 1.8;">
+        <li><i class="fas fa-check-circle" style="color:#f59e0b;"></i> कुल 40 प्रश्न। सभी का प्रयास करें।</li>
+        <li><i class="fas fa-ban"></i> गलत उत्तर: -1, सही: +5 अंक।</li>
+        <li><i class="fas fa-lightbulb"></i> हर प्रश्न के लिए संकेत और व्याख्या।</li>
+        <li><i class="fas fa-stopwatch"></i> सख्त 45 मिनट का समय · ऑटो-सबमिट।</li>
+        <li><i class="fas fa-chart-simple"></i> रिपोर्ट, लीडरबोर्ड, उत्तर समीक्षा।</li>
+        <li><i class="fas fa-language"></i> Bilingual: हिंदी & English उपलब्ध।</li>
+      </ul>
+      <div class="action-row" style="margin-top: 24px;">
+        <button id="confirmStartExam" class="action-btn primary-btn">मैं सहमत हूँ और शुरू करें</button>
+        <button id="backToWelcomeBtn" class="action-btn">रद्द करें</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="testPanel" class="hidden">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span style="background:white; padding: 8px 16px; border-radius: 60px; font-weight:600;"><i class="fas fa-list"></i> Q <span id="currentQno">1</span>/40</span>
+      <div class="timer-circle" id="liveTimer">45:00</div>
+      <span style="background:#fef3c7; padding: 8px 16px; border-radius: 60px; font-weight:600;"><span id="attemptedCountBadge">0</span>/40</span>
+    </div>
+    <div class="card-modern">
+      <div class="card-header">
+        <span><i class="fas fa-flask"></i> <span id="sectionLabel">Section</span></span>
+        <div class="lang-btn-group">
+          <button id="langHiBtn" class="lang-btn-sm active-lang">हिंदी</button>
+          <button id="langEnBtn" class="lang-btn-sm">English</button>
+        </div>
+        <span><span id="difficultyBadge" style="background:#fef3c7; padding:4px 12px; border-radius:40px; font-size:0.7rem;">⚗️ Hard</span></span>
+      </div>
+      <div class="question-panel">
+        <div id="chapterTagDisplay" class="chapter-tag">Topic</div>
+        <div id="questionText" class="q-text">Loading question...</div>
+        <div id="optionsList"></div>
+        <div class="action-row">
+          <button id="prevQMobile" class="action-btn"><i class="fas fa-chevron-left"></i> Previous</button>
+          <button id="nextQMobile" class="action-btn">Next <i class="fas fa-chevron-right"></i></button>
+          <button id="markReviewMobile" class="action-btn warning-btn"><i class="fas fa-flag"></i> Mark</button>
+          <button id="hintBtnMobile" class="action-btn hint-btn"><i class="fas fa-lightbulb"></i> Hint</button>
+          <button id="clearMobile" class="action-btn"><i class="fas fa-eraser"></i> Clear</button>
+        </div>
+        <button id="saveAndNextMobile" class="btn-block primary-btn" style="margin-top:6px;"><i class="fas fa-save"></i> Save & Next</button>
+      </div>
+    </div>
+    <div class="card-modern">
+      <div class="card-header">📊 प्रश्न पैलेट और विश्लेषण</div>
+      <div id="paletteGrid" class="palette-grid"></div>
+      <div class="legend">
+        <span><span class="legend-color" style="background:#f59e0b;"></span> उत्तर दिया</span>
+        <span><span class="legend-color" style="background:#ef4444;"></span> चिह्नित</span>
+        <span><span class="legend-color" style="background:#94a3b8;"></span> देखा गया</span>
+        <span><span class="legend-color" style="background:#ef4444;"></span> गलत (समीक्षा)</span>
+      </div>
+      <div class="analysis-box" id="livePerformanceBox">
+        <i class="fas fa-chart-line"></i> प्रयास: <span id="attemptCount">0</span>/40 | अनुत्तरित: <span id="unansweredCount">40</span> | <span id="trendMsg">—</span>
+      </div>
+      <div style="padding: 16px;">
+        <button id="finalSubmitTestBtn" class="btn-block" style="background: #dc2626;"><i class="fas fa-check-double"></i> परीक्षा सबमिट करें</button>
+        <button id="pauseSaveBtn" class="btn-block btn-outline" style="margin-top:8px;"><i class="fas fa-pause-circle"></i> प्रगति सहेजें</button>
+        <button id="fullScreenBtn" class="btn-block btn-outline" style="margin-top:8px;"><i class="fas fa-expand"></i> फोकस मोड</button>
+        <div class="flex-btns" style="margin-top:12px;">
+          <button id="quickNavBtn" class="action-btn"><i class="fas fa-random"></i> अनुत्तरित</button>
+          <button id="jumpMarkedBtn" class="action-btn"><i class="fas fa-flag"></i> चिह्नित</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultPanel" class="card-modern hidden"></div>
+</div>
+
+<div id="floatingNav">
+  <button id="floatPrevBtn"><i class="fas fa-chevron-left"></i></button>
+  <button id="floatNextBtn"><i class="fas fa-chevron-right"></i></button>
+</div>
+
+<script>
+  (function(){
+    "use strict";
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvMjjZW8VhupLm7fawJzviuT2MX3jABP3glXICcedRQlw-387mauydpFJtOXIel7rOWA/exec';
+    const CURRENT_TEST_CODE = 'CUET_CHEM01';
+    const CURRENT_TEST_NAME = 'CUET UG Chemistry Mock 1';
+    const TOTAL_QS = 40;
+    const MAX_ATTEMPT = 40;
+    
+    const QUESTIONS = [
+      { cat:"Electrochemistry", text_en:"A solution of CuSO₄ is electrolyzed for 10 minutes with a current of 1.5 amperes. What is the mass of copper deposited at the cathode? (Atomic mass of Cu = 63.5 u)", text_hi:"CuSO₄ के एक विलयन को 1.5 एम्पीयर की धारा के साथ 10 मिनट तक इलेक्ट्रोलाइज किया जाता है। कैथोड पर जमा तांबे का द्रव्यमान क्या है? (Cu का परमाणु द्रव्यमान = 63.5 u)", opts_en:["0.2938 g","0.3542 g","0.1874 g","0.4215 g"], opts_hi:["0.2938 g","0.3542 g","0.1874 g","0.4215 g"], correct:0, correctAns:"0.2938 g", explanation_en:"Use m = Zit/F. Z = 63.5/(2×96500), i=1.5, t=600s. m = (63.5×1.5×600)/(2×96500) = 0.2938g", explanation_hi:"m = Zit/F का उपयोग करें। Z = 63.5/(2×96500), i=1.5, t=600s", hint_en:"Use Faraday's law: m = Zit/F", hint_hi:"फैराडे का नियम: m = Zit/F" },
+      { cat:"Electrochemistry", text_en:"Which of the following shows the highest electrical conductance?", text_hi:"निम्नलिखित में से कौन उच्चतम विद्युत चालकता प्रदर्शित करता है?", opts_en:["0.1 M Acetic acid","0.1 M Chloroacetic acid","0.1 M Fluoroacetic acid","0.1 M Difluoroacetic acid"], opts_hi:["0.1 M एसिटिक एसिड","0.1 M क्लोरोएसिटिक एसिड","0.1 M फ्लोरोएसिटिक एसिड","0.1 M डाइफ्लोरोएसिटिक एसिड"], correct:3, correctAns:"0.1 M Difluoroacetic acid", explanation_en:"Two 'F' atoms increase acidity and ionizability drastically via -I effect", explanation_hi:"दो 'F' परमाणु -I प्रभाव से अम्लता और आयनीकरण बढ़ाते हैं", hint_en:"-I effect of Fluorine", hint_hi:"फ्लोरीन का -I प्रभाव" },
+      { cat:"Chemical Kinetics", text_en:"If the rate constant for a first-order reaction is k, the time (t) required for the completion of 99% of the reaction is:", text_hi:"यदि प्रथम कोटि अभिक्रिया के लिए दर स्थिरांक k है, तो 99% पूर्णता के लिए समय (t) है:", opts_en:["t = 2.303/k","t = 4.606/k","t = 6.909/k","t = 0.693/k"], opts_hi:["t = 2.303/k","t = 4.606/k","t = 6.909/k","t = 0.693/k"], correct:1, correctAns:"t = 4.606/k", explanation_en:"t = (2.303/k) × log(100/1) = (2.303×2)/k = 4.606/k", explanation_hi:"t = (2.303/k) × log(100/1) = (2.303×2)/k = 4.606/k", hint_en:"Use first-order formula: t = (2.303/k)log(a/a-x)", hint_hi:"प्रथम कोटि सूत्र: t = (2.303/k)log(a/a-x)" },
+      { cat:"Organic Chemistry", text_en:"The correct order of acid strength: (I) p-Nitrophenol, (II) p-Cresol, (III) Phenol, (IV) p-Chlorophenol", text_hi:"अम्लीय शक्ति का सही क्रम: (I) p-नाइट्रोफिनॉल, (II) p-क्रीसॉल, (III) फिनॉल, (IV) p-क्लोरोफिनॉल", opts_en:["I > IV > III > II","II > III > IV > I","I > III > IV > II","IV > I > III > II"], opts_hi:["I > IV > III > II","II > III > IV > I","I > III > IV > II","IV > I > III > II"], correct:0, correctAns:"I > IV > III > II", explanation_en:"Nitro group increases acidity most, Methyl decreases it", explanation_hi:"नाइट्रो समूह अम्लता सबसे अधिक बढ़ाता है, मिथाइल घटाता है", hint_en:"-NO₂ strongest electron withdrawing", hint_hi:"-NO₂ सबसे मजबूत इलेक्ट्रॉन निष्कासक" },
+      { cat:"Coordination Chemistry", text_en:"What is the magnetic moment (spin-only) of [Mn(CN)₆]⁴⁻?", text_hi:"[Mn(CN)₆]⁴⁻ का चुंबकीय आघूर्ण (spin-only) क्या है?", opts_en:["5.92 BM","1.73 BM","2.83 BM","3.87 BM"], opts_hi:["5.92 BM","1.73 BM","2.83 BM","3.87 BM"], correct:1, correctAns:"1.73 BM", explanation_en:"CN⁻ is strong field, Mn²⁺ d⁵ low spin with 1 unpaired e⁻. μ = √(1×3) = 1.73 BM", explanation_hi:"CN⁻ मजबूत क्षेत्र, Mn²⁺ d⁵ लो स्पिन, 1 अयुग्मित e⁻", hint_en:"Strong field ligand → low spin", hint_hi:"मजबूत क्षेत्र लिगेंड → लो स्पिन" },
+      { cat:"Organic Chemistry", text_en:"Which reagent converts Benzonitrile to Benzaldehyde?", text_hi:"बेंज़ोनाइट्राइल को बेंज़लडिहाइड में कौन बदलता है?", opts_en:["LiAlH₄","SnCl₂/HCl then H₃O⁺","NaBH₄","H₂/Pd-BaSO₄"], opts_hi:["LiAlH₄","SnCl₂/HCl फिर H₃O⁺","NaBH₄","H₂/Pd-BaSO₄"], correct:1, correctAns:"SnCl₂/HCl then H₃O⁺", explanation_en:"Stephen reduction: SnCl₂/HCl converts nitrile to aldehyde", explanation_hi:"स्टीफन अपचयन: SnCl₂/HCl नाइट्राइल को एल्डिहाइड में बदलता है", hint_en:"Stephen Reduction", hint_hi:"स्टीफन अपचयन" },
+      { cat:"Coordination Chemistry", text_en:"Number of ions from [Co(NH₃)₄Cl₂]Cl in aqueous solution:", text_hi:"जलीय विलयन में [Co(NH₃)₄Cl₂]Cl से आयनों की संख्या:", opts_en:["2","3","4","1"], opts_hi:["2","3","4","1"], correct:0, correctAns:"2", explanation_en:"[Co(NH₃)₄Cl₂]⁺ and Cl⁻ = 2 ions", explanation_hi:"[Co(NH₃)₄Cl₂]⁺ और Cl⁻ = 2 आयन", hint_en:"Count ions after dissociation", hint_hi:"वियोजन के बाद आयन गिनें" },
+      { cat:"Polymers", text_en:"Which is a Copolymer?", text_hi:"को-पॉलीमर कौन सा है?", opts_en:["Nylon 6","PVC","Buna-S","Polythene"], opts_hi:["नायलॉन 6","PVC","बुना-S","पॉलीथीन"], correct:2, correctAns:"Buna-S", explanation_en:"Made of Styrene and Butadiene", explanation_hi:"स्टाइरीन और ब्यूटाडीन से बना", hint_en:"Two different monomers", hint_hi:"दो भिन्न मोनोमर" },
+      { cat:"Solid State", text_en:"FCC: A at corners, B at face centers. One B missing. Formula:", text_hi:"FCC: A कोनों पर, B फलक केंद्र पर। एक B गायब। सूत्र:", opts_en:["A₂B₅","A₂B₃","AB₃","A₅B₂"], opts_hi:["A₂B₅","A₂B₃","AB₃","A₅B₂"], correct:0, correctAns:"A₂B₅", explanation_en:"A = 8×1/8 = 1; B = 5×1/2 = 2.5. Ratio 1:2.5 = 2:5", explanation_hi:"A = 8×1/8 = 1; B = 5×1/2 = 2.5. अनुपात 1:2.5 = 2:5", hint_en:"Count effective atoms", hint_hi:"प्रभावी परमाणु गिनें" },
+      { cat:"Coordination Chemistry", text_en:"Linkage isomerism is shown by which ligands?", text_hi:"लिंकेज आइसोमेरिज्म कौन से लिगेंड दिखाते हैं?", opts_en:["Monodentate","Ambidentate","Bidentate","Chelating"], opts_hi:["एकदंतुक","उभयदंतुक","द्विदंतुक","कीलेटिंग"], correct:1, correctAns:"Ambidentate", explanation_en:"Ligands like NO₂⁻, SCN⁻ can bind through different atoms", explanation_hi:"NO₂⁻, SCN⁻ जैसे लिगेंड विभिन्न परमाणुओं से बंध सकते हैं", hint_en:"Two donor sites on same ligand", hint_hi:"एक ही लिगेंड पर दो दाता स्थल" },
+      { cat:"Solutions", text_en:"Boiling point of 0.52g glucose (M=180) in 80.2g water. (Kb=0.52 K kg/mol)", text_hi:"80.2g पानी में 0.52g ग्लूकोज (M=180) का क्वथनांक। (Kb=0.52)", opts_en:["100.018°C","100.18°C","101.8°C","99.82°C"], opts_hi:["100.018°C","100.18°C","101.8°C","99.82°C"], correct:0, correctAns:"100.018°C", explanation_en:"ΔTb = (0.52×0.52×1000)/(180×80.2) = 0.018°C. BP = 100.018°C", explanation_hi:"ΔTb = (0.52×0.52×1000)/(180×80.2) = 0.018°C. क्वथनांक = 100.018°C", hint_en:"ΔTb = Kb × molality", hint_hi:"ΔTb = Kb × मोललता" },
+      { cat:"Organic Chemistry", text_en:"Which will NOT undergo Aldol condensation?", text_hi:"एल्डोल संघनन कौन नहीं करेगा?", opts_en:["Acetaldehyde","Propanal","Benzaldehyde","Trichloroacetaldehyde"], opts_hi:["एसीटैल्डिहाइड","प्रोपेनल","बेंज़लडिहाइड","ट्राइक्लोरोएसीटैल्डिहाइड"], correct:2, correctAns:"Benzaldehyde", explanation_en:"Benzaldehyde lacks α-hydrogen atoms", explanation_hi:"बेंज़लडिहाइड में α-हाइड्रोजन नहीं है", hint_en:"No α-hydrogen", hint_hi:"α-हाइड्रोजन नहीं" },
+      { cat:"Surface Chemistry", text_en:"Gold number measures:", text_hi:"गोल्ड नंबर मापता है:", opts_en:["Protective power of lyophilic colloid","Purity of gold","Charge on gold sol","Size of gold particles"], opts_hi:["द्रव-स्नेही कोलाइड की सुरक्षात्मक शक्ति","सोने की शुद्धता","गोल्ड सोल पर चार्ज","सोने के कणों का आकार"], correct:0, correctAns:"Protective power of lyophilic colloid", explanation_en:"Lower gold number = better protective power", explanation_hi:"कम गोल्ड नंबर = बेहतर सुरक्षात्मक शक्ति", hint_en:"Protection of lyophobic sols", hint_hi:"द्रव-विरोधी सोल की सुरक्षा" },
+      { cat:"Chemical Bonding", text_en:"Structure of XeF₄:", text_hi:"XeF₄ की संरचना:", opts_en:["Tetrahedral","Square planar","Octahedral","Pyramidal"], opts_hi:["चतुष्फलकीय","वर्ग समतलीय","अष्टफलकीय","पिरामिडीय"], correct:1, correctAns:"Square planar", explanation_en:"sp³d² hybridization with 2 lone pairs in axial positions", explanation_hi:"sp³d² संकरण, 2 लोन पेयर अक्षीय स्थिति में", hint_en:"2 lone pairs, 4 bond pairs", hint_hi:"2 लोन पेयर, 4 बॉन्ड पेयर" },
+      { cat:"d-Block Elements", text_en:"Lanthanoid contraction is due to:", text_hi:"लैंथेनाइड संकुचन का कारण:", opts_en:["Poor shielding of 4f electrons","Effective shielding of 4f","Increase in atomic number","Decrease in nuclear charge"], opts_hi:["4f इलेक्ट्रॉनों का खराब परिरक्षण","4f का प्रभावी परिरक्षण","परमाणु क्रमांक में वृद्धि","नाभिकीय आवेश में कमी"], correct:0, correctAns:"Poor shielding of 4f electrons", explanation_en:"4f electrons poorly shield increasing nuclear charge", explanation_hi:"4f इलेक्ट्रॉन बढ़ते नाभिकीय आवेश को खराब परिरक्षित करते हैं", hint_en:"Poor shielding effect", hint_hi:"खराब परिरक्षण प्रभाव" },
+      { cat:"Electrochemistry", text_en:"Which is a primary battery?", text_hi:"प्राथमिक बैटरी कौन सी है?", opts_en:["Lead storage battery","Mercury cell","Ni-Cd cell","Fuel cell"], opts_hi:["लेड स्टोरेज बैटरी","मरकरी सेल","Ni-Cd सेल","ईंधन सेल"], correct:1, correctAns:"Mercury cell", explanation_en:"Primary cells cannot be recharged", explanation_hi:"प्राथमिक सेल रिचार्ज नहीं किए जा सकते", hint_en:"Non-rechargeable", hint_hi:"गैर-रिचार्जेबल" },
+      { cat:"Biomolecules", text_en:"Enzyme converting Glucose to Ethyl Alcohol:", text_hi:"ग्लूकोज को एथिल अल्कोहल में बदलने वाला एंजाइम:", opts_en:["Invertase","Zymase","Diastase","Maltase"], opts_hi:["इन्वर्टेज","जाइमेज","डायस्टेज","माल्टेज"], correct:1, correctAns:"Zymase", explanation_en:"Zymase in yeast catalyzes fermentation", explanation_hi:"खमीर में जाइमेज किण्वन उत्प्रेरित करता है", hint_en:"Fermentation enzyme in yeast", hint_hi:"खमीर में किण्वन एंजाइम" },
+      { cat:"Solutions", text_en:"Molality of pure water:", text_hi:"शुद्ध जल की मोललता:", opts_en:["55.5","18","1","1000"], opts_hi:["55.5","18","1","1000"], correct:0, correctAns:"55.5", explanation_en:"1 kg water = 1000/18 = 55.5 moles", explanation_hi:"1 kg पानी = 1000/18 = 55.5 मोल", hint_en:"Moles of water per kg", hint_hi:"प्रति kg पानी के मोल" },
+      { cat:"Chemical Kinetics", text_en:"Half-life of zero-order reaction is:", text_hi:"शून्य-कोटि अभिक्रिया का अर्ध-आयु काल:", opts_en:["Directly proportional to [A]₀","Inversely proportional to [A]₀","Independent of [A]₀","None"], opts_hi:["[A]₀ के समानुपाती","[A]₀ के व्युत्क्रमानुपाती","[A]₀ से स्वतंत्र","कोई नहीं"], correct:0, correctAns:"Directly proportional to [A]₀", explanation_en:"t½ = [A]₀/2k for zero order", explanation_hi:"शून्य कोटि के लिए t½ = [A]₀/2k", hint_en:"t½ = [A]₀/2k", hint_hi:"t½ = [A]₀/2k" },
+      { cat:"Organic Chemistry", text_en:"Gabriel Phthalimide synthesis prepares:", text_hi:"गैब्रियल थैलिमाइड संश्लेषण बनाता है:", opts_en:["Primary aromatic amines","Primary aliphatic amines","Secondary amines","Tertiary amines"], opts_hi:["प्राथमिक सुगंधित अमाइन","प्राथमिक एलिफैटिक अमाइन","द्वितीयक अमाइन","तृतीयक अमाइन"], correct:1, correctAns:"Primary aliphatic amines", explanation_en:"Aromatic halides don't undergo SN2 with phthalimide", explanation_hi:"एरोमैटिक हैलाइड थैलिमाइड के साथ SN2 नहीं करते", hint_en:"Only aliphatic primary amines", hint_hi:"केवल एलिफैटिक प्राथमिक अमाइन" },
+      { cat:"Electrochemistry", text_en:"E°(Cu²⁺/Cu)=+0.34V. E at pH=14 if Ksp(Cu(OH)₂)=10⁻¹⁹:", text_hi:"E°(Cu²⁺/Cu)=+0.34V. pH=14 पर E यदि Ksp(Cu(OH)₂)=10⁻¹⁹:", opts_en:["-0.22V","+0.22V","-0.44V","+0.44V"], opts_hi:["-0.22V","+0.22V","-0.44V","+0.44V"], correct:0, correctAns:"-0.22V", explanation_en:"[Cu²⁺]=10⁻¹⁹ at pH14. Nernst: E=0.34-(0.059/2)log(1/10⁻¹⁹)=-0.22V", explanation_hi:"pH14 पर [Cu²⁺]=10⁻¹⁹। नेर्नस्ट: E=0.34-(0.059/2)log(1/10⁻¹⁹)=-0.22V", hint_en:"Use Nernst equation", hint_hi:"नेर्नस्ट समीकरण उपयोग करें" },
+      { cat:"Organic Chemistry", text_en:"CH₃CH₂I + KOH(aq) → Product. Rate unchanged if [KOH] doubled. Mechanism:", text_hi:"CH₃CH₂I + KOH(aq) → उत्पाद। [KOH] दोगुनी पर दर अपरिवर्तित। क्रियाविधि:", opts_en:["SN1","SN2","E1","E2"], opts_hi:["SN1","SN2","E1","E2"], correct:0, correctAns:"SN1", explanation_en:"Rate independent of nucleophile = first order = SN1", explanation_hi:"दर नाभिकरागी पर निर्भर नहीं = प्रथम कोटि = SN1", hint_en:"Rate depends only on substrate", hint_hi:"दर केवल सब्सट्रेट पर निर्भर" },
+      { cat:"Organic Chemistry", text_en:"Most reactive towards nucleophilic addition:", text_hi:"नाभिकरागी योग के प्रति सर्वाधिक क्रियाशील:", opts_en:["CH₃CHO","Ph-CO-Ph","CH₃COCH₃","HCHO"], opts_hi:["CH₃CHO","Ph-CO-Ph","CH₃COCH₃","HCHO"], correct:3, correctAns:"HCHO", explanation_en:"Formaldehyde: least steric hindrance, most electrophilic carbonyl", explanation_hi:"फॉर्मलडिहाइड: न्यूनतम त्रिविम बाधा, सर्वाधिक इलेक्ट्रोफिलिक", hint_en:"Steric hindrance affects reactivity", hint_hi:"त्रिविम बाधा क्रियाशीलता प्रभावित करती है" },
+      { cat:"Organic Chemistry", text_en:"X (Br₂/NaOH)→ Y (HNO₂)→ Ethanol. X is:", text_hi:"X (Br₂/NaOH)→ Y (HNO₂)→ इथेनॉल। X है:", opts_en:["Ethanamide","Propanamide","Benzamide","Methanamide"], opts_hi:["एथेनामाइड","प्रोपेनामाइड","बेंजामाइड","मेथानामाइड"], correct:1, correctAns:"Propanamide", explanation_en:"Propanamide → Ethylamine → Ethanol. Hofmann Bromamide.", explanation_hi:"प्रोपेनामाइड → एथिलअमीन → इथेनॉल। हॉफमैन ब्रोमामाइड।", hint_en:"Hofmann Bromamide Degradation", hint_hi:"हॉफमैन ब्रोमामाइड निम्नीकरण" },
+      { cat:"d-Block Elements", text_en:"General electronic configuration of transition elements:", text_hi:"संक्रमण तत्वों का सामान्य इलेक्ट्रॉनिक विन्यास:", opts_en:["(n-1)d¹⁻¹⁰ ns¹⁻²","(n-1)d¹⁻⁵ ns²","(n-1)d¹⁰ ns²","nd¹⁻¹⁰ ns¹⁻²"], opts_hi:["(n-1)d¹⁻¹⁰ ns¹⁻²","(n-1)d¹⁻⁵ ns²","(n-1)d¹⁰ ns²","nd¹⁻¹⁰ ns¹⁻²"], correct:0, correctAns:"(n-1)d¹⁻¹⁰ ns¹⁻²", explanation_en:"d-block elements have partially filled (n-1)d orbitals", explanation_hi:"d-ब्लॉक तत्वों में आंशिक भरे (n-1)d कक्षक", hint_en:"Partially filled d orbitals", hint_hi:"आंशिक भरे d कक्षक" },
+      { cat:"Biomolecules", text_en:"Non-reducing sugar:", text_hi:"अन-अपचायी शर्करा:", opts_en:["Glucose","Lactose","Maltose","Sucrose"], opts_hi:["ग्लूकोज","लैक्टोज","माल्टोज","सुक्रोज"], correct:3, correctAns:"Sucrose", explanation_en:"Both anomeric carbons involved in glycosidic bond", explanation_hi:"दोनों एनोमेरिक कार्बन ग्लाइकोसिडिक बंध में शामिल", hint_en:"No free anomeric -OH", hint_hi:"कोई मुक्त एनोमेरिक -OH नहीं" },
+      { cat:"Surface Chemistry", text_en:"0.25g starch prevents coagulation of 100mL sol. Gold number:", text_hi:"0.25g स्टार्च 100mL सोल का जमाव रोकता है। गोल्ड नंबर:", opts_en:["25","2.5","0.25","250"], opts_hi:["25","2.5","0.25","250"], correct:0, correctAns:"25", explanation_en:"250mg for 10mL = 25mg. Gold number = 25", explanation_hi:"10mL के लिए 250mg = 25mg। गोल्ड नंबर = 25", hint_en:"mg per 10mL of gold sol", hint_hi:"10mL गोल्ड सोल प्रति mg" },
+      { cat:"p-Block Elements", text_en:"Oxidation state of P is +3 in:", text_hi:"P की ऑक्सीकरण अवस्था +3 है:", opts_en:["H₃PO₄","H₄P₂O₇","H₃PO₃","HPO₃"], opts_hi:["H₃PO₄","H₄P₂O₇","H₃PO₃","HPO₃"], correct:2, correctAns:"H₃PO₃", explanation_en:"H₃PO₃: 3(+1)+x+3(-2)=0 → x=+3", explanation_hi:"H₃PO₃: 3(+1)+x+3(-2)=0 → x=+3", hint_en:"Calculate using oxidation rules", hint_hi:"ऑक्सीकरण नियमों से गणना" },
+      { cat:"Organic Chemistry", text_en:"Phenol + CHCl₃ + NaOH → Product:", text_hi:"फिनॉल + CHCl₃ + NaOH → उत्पाद:", opts_en:["Salicylic acid","Salicylaldehyde","Benzene","Chlorobenzene"], opts_hi:["सैलिसिलिक अम्ल","सैलिसिलैल्डिहाइड","बेंजीन","क्लोरोबेंजीन"], correct:1, correctAns:"Salicylaldehyde", explanation_en:"Reimer-Tiemann reaction gives o-hydroxybenzaldehyde", explanation_hi:"रीमर-टीमैन अभिक्रिया o-हाइड्रॉक्सीबेंज़लडिहाइड देती है", hint_en:"Reimer-Tiemann Reaction", hint_hi:"रीमर-टीमैन अभिक्रिया" },
+      { cat:"Coordination Chemistry", text_en:"[Ni(CO)₄] and [Ni(CN)₄]²⁻ geometry:", text_hi:"[Ni(CO)₄] और [Ni(CN)₄]²⁻ की ज्यामिति:", opts_en:["Both tetrahedral","Both square planar","Tetrahedral & Square planar","Square planar & Tetrahedral"], opts_hi:["दोनों चतुष्फलकीय","दोनों वर्ग समतलीय","चतुष्फलकीय और वर्ग समतलीय","वर्ग समतलीय और चतुष्फलकीय"], correct:2, correctAns:"Tetrahedral & Square planar", explanation_en:"Ni(CO)₄ sp³(Td), [Ni(CN)₄]²⁻ dsp²(sq.pl)", explanation_hi:"Ni(CO)₄ sp³(Td), [Ni(CN)₄]²⁻ dsp²(वर्ग स.)", hint_en:"CO weak field, CN⁻ strong field", hint_hi:"CO दुर्बल क्षेत्र, CN⁻ प्रबल क्षेत्र" },
+      { cat:"Solid State", text_en:"Example of interstitial compound:", text_hi:"अंतराकाशी यौगिक का उदाहरण:", opts_en:["TiC","Fe₀.₉₄O","ZnS","NaCl"], opts_hi:["TiC","Fe₀.₉₄O","ZnS","NaCl"], correct:0, correctAns:"TiC", explanation_en:"Carbon fits in interstitial sites of Titanium lattice", explanation_hi:"कार्बन टाइटेनियम जाली के अंतराकाशी स्थलों में बैठता है", hint_en:"Small atom in metal lattice", hint_hi:"धातु जाली में छोटा परमाणु" },
+      { cat:"Biomolecules", text_en:"DNA and RNA differ in:", text_hi:"DNA और RNA में अंतर:", opts_en:["Adenine","Guanine","Cytosine","Thymine/Uracil"], opts_hi:["एडेनिन","ग्वानिन","साइटोसिन","थाइमिन/यूरासिल"], correct:3, correctAns:"Thymine/Uracil", explanation_en:"DNA has Thymine, RNA has Uracil", explanation_hi:"DNA में थाइमिन, RNA में यूरासिल", hint_en:"One base is different", hint_hi:"एक क्षार भिन्न है" },
+      { cat:"Chemical Kinetics", text_en:"50% in 2hrs, 75% in 4hrs. Order:", text_hi:"2 घंटे में 50%, 4 घंटे में 75%। कोटि:", opts_en:["0","1","2","3"], opts_hi:["0","1","2","3"], correct:1, correctAns:"1", explanation_en:"For 1st order: t₇₅% = 2 × t₅₀%", explanation_hi:"प्रथम कोटि: t₇₅% = 2 × t₅₀%", hint_en:"t₇₅ = 2×t₅₀ for first order", hint_hi:"प्रथम कोटि में t₇₅ = 2×t₅₀" },
+      { cat:"Solutions", text_en:"KH(O₂)=4.34×10⁴ atm, pO₂=0.2 atm. Mole fraction:", text_hi:"KH(O₂)=4.34×10⁴ atm, pO₂=0.2 atm. मोल अंश:", opts_en:["4.6×10⁻⁶","2.1×10⁻⁵","4.6×10⁻⁵","2.1×10⁻⁶"], opts_hi:["4.6×10⁻⁶","2.1×10⁻⁵","4.6×10⁻⁵","2.1×10⁻⁶"], correct:0, correctAns:"4.6×10⁻⁶", explanation_en:"χ = P/KH = 0.2/4.34×10⁴ = 4.6×10⁻⁶", explanation_hi:"χ = P/KH = 0.2/4.34×10⁴ = 4.6×10⁻⁶", hint_en:"Henry's Law: P = KH × χ", hint_hi:"हेनरी नियम: P = KH × χ" },
+      { cat:"Chemistry in Daily Life", text_en:"Broad Spectrum Antibiotic:", text_hi:"ब्रॉड स्पेक्ट्रम एंटीबायोटिक:", opts_en:["Penicillin G","Chloramphenicol","Aspirin","Paracetamol"], opts_hi:["पेनिसिलिन G","क्लोरैम्फेनिकॉल","एस्पिरिन","पैरासिटामोल"], correct:1, correctAns:"Chloramphenicol", explanation_en:"Chloramphenicol works against wide range of bacteria", explanation_hi:"क्लोरैम्फेनिकॉल विभिन्न जीवाणुओं पर कार्य करता है", hint_en:"Works on gram +ve and -ve", hint_hi:"ग्राम +ve और -ve पर कार्य" },
+      { cat:"Coordination Chemistry", text_en:"[Co(NH₃)₅SO₄]Br & [Co(NH₃)₅Br]SO₄ show:", text_hi:"[Co(NH₃)₅SO₄]Br और [Co(NH₃)₅Br]SO₄ दिखाते हैं:", opts_en:["Ionization isomerism","Linkage isomerism","Coordination isomerism","Solvate isomerism"], opts_hi:["आयनीकरण समावयवता","लिंकेज समावयवता","उपसहसंयोजन समावयवता","सॉल्वेट समावयवता"], correct:0, correctAns:"Ionization isomerism", explanation_en:"Exchange of ions between coordination and ionization spheres", explanation_hi:"उपसहसंयोजन और आयनीकरण मंडल के बीच आयन विनिमय", hint_en:"Different ions outside bracket", hint_hi:"कोष्ठक के बाहर भिन्न आयन" },
+      { cat:"Organic Chemistry", text_en:"Highest boiling point:", text_hi:"उच्चतम क्वथनांक:", opts_en:["CH₃CH₂CH₂CH₂OH","CH₃CH₂OCH₂CH₃","CH₃CH₂CH₂CHO","CH₃CH₂CH₂CH₃"], opts_hi:["CH₃CH₂CH₂CH₂OH","CH₃CH₂OCH₂CH₃","CH₃CH₂CH₂CHO","CH₃CH₂CH₂CH₃"], correct:0, correctAns:"CH₃CH₂CH₂CH₂OH", explanation_en:"Alcohols have strongest H-bonding", explanation_hi:"अल्कोहल में सबसे मजबूत H-बंधन", hint_en:"Hydrogen bonding", hint_hi:"हाइड्रोजन बंधन" },
+      { cat:"Electrochemistry", text_en:"ΔG and Ecell relation:", text_hi:"ΔG और Ecell संबंध:", opts_en:["ΔG = nFE","ΔG = -nFE","ΔG = -nF/E","ΔG = E/nF"], opts_hi:["ΔG = nFE","ΔG = -nFE","ΔG = -nF/E","ΔG = E/nF"], correct:1, correctAns:"ΔG = -nFE", explanation_en:"Spontaneous when ΔG negative, E positive", explanation_hi:"स्वतः जब ΔG ऋणात्मक, E धनात्मक", hint_en:"ΔG = -nFEcell", hint_hi:"ΔG = -nFEcell" },
+      { cat:"Biomolecules", text_en:"Vitamin C is:", text_hi:"विटामिन C है:", opts_en:["Retinol","Ascorbic acid","Riboflavin","Calciferol"], opts_hi:["रेटिनॉल","एस्कॉर्बिक एसिड","राइबोफ्लेविन","कैल्सीफेरॉल"], correct:1, correctAns:"Ascorbic acid", explanation_en:"Vitamin C = Ascorbic acid (water soluble)", explanation_hi:"विटामिन C = एस्कॉर्बिक एसिड (जल विलेय)", hint_en:"Water soluble vitamin", hint_hi:"जल विलेय विटामिन" }
+    ];
+
+    let appState = { userName: localStorage.getItem('cuet_chem_user') || '', answers: {}, markedSet: new Set(), visitedSet: new Set(), currentIdx: 0, timeLeft: 45 * 60, timerInterval: null, testActive: false, examSubmitted: false, reviewMode: false, currentLang: 'hi' };
+
+    function t(key, q) {
+      if (!q) return '';
+      if (appState.currentLang === 'hi' && q[key+'_hi']) return q[key+'_hi'];
+      return q[key+'_en'] || '';
+    }
+
+    function calculatePercentile(score) { const maxScore = TOTAL_QS * 5; const minScore = -MAX_ATTEMPT * 1; let normalized = (score - minScore) / (maxScore - minScore); normalized = Math.min(1, Math.max(0, normalized)); return (Math.pow(normalized, 0.85) * 100).toFixed(2); }
+    function formatTimeSec(sec){ let m = Math.floor(sec/60); let s = sec % 60; return `${m}m ${s}s`; }
+    function getPerformanceTag(score) { if (score >= 180) return "⚗️ Chemistry Champion"; if (score >= 150) return "💪 Excellent"; if (score >= 100) return "⚡ Good Attempt"; return "📉 Need More Practice"; }
+    function speedAnalysis() { const attempted = Object.keys(appState.answers).length; const timeUsed = 2700 - appState.timeLeft; if (timeUsed <= 0) return "0 Q/min"; return (attempted / (timeUsed / 60)).toFixed(2) + " Q/min"; }
+    function estimateRank(percentile) { return Math.round((100 - parseFloat(percentile)) / 100 * 50000); }
+    function showLoading(msg) { document.getElementById('loadingMessage').innerText = msg; document.getElementById('loadingOverlay').classList.remove('hidden'); }
+    function hideLoading() { document.getElementById('loadingOverlay').classList.add('hidden'); }
+    function showToast(title, icon='success', timer=1800) { Swal.fire({ toast: true, position: 'top-end', icon, title, showConfirmButton: false, timer }); }
+    function updateAttemptStats() { const att = Object.keys(appState.answers).length; document.getElementById('attemptCount').innerText = att; document.getElementById('unansweredCount').innerText = TOTAL_QS - att; document.getElementById('attemptedCountBadge').innerText = att; document.getElementById('trendMsg').innerHTML = att > 30 ? "🔥 Fast Pace" : "⚡ Improving"; }
+    function persistLocal() { if (!appState.testActive || appState.reviewMode) return; const save = { answers: appState.answers, marked: Array.from(appState.markedSet), visited: Array.from(appState.visitedSet), currentIdx: appState.currentIdx, timeLeft: appState.timeLeft, userName: appState.userName, currentLang: appState.currentLang }; localStorage.setItem('cuet_chem_progress', JSON.stringify(save)); }
+    function saveResultToStorage(score, correct, wrong, accuracy) {
+      const results = JSON.parse(localStorage.getItem('cuet_chem_results') || '[]');
+      results.push({ testCode: CURRENT_TEST_CODE, testName: CURRENT_TEST_NAME, userName: appState.userName, score, correct, wrong, accuracy, date: new Date().toISOString(), timeUsed: formatTimeSec(2700 - appState.timeLeft) });
+      if (results.length > 20) results.shift();
+      localStorage.setItem('cuet_chem_results', JSON.stringify(results));
+    }
+    function loadSavedProgress() { const saved = localStorage.getItem('cuet_chem_progress'); if (saved) { try { const d = JSON.parse(saved); if (d.answers && Object.keys(d.answers).length) { appState.answers = d.answers; appState.markedSet = new Set(d.marked); appState.visitedSet = new Set(d.visited); appState.currentIdx = d.currentIdx; appState.timeLeft = d.timeLeft; appState.userName = d.userName || appState.userName; appState.currentLang = d.currentLang || 'hi'; document.getElementById('resumeSection').classList.remove('hidden'); } } catch(e){} } }
+    function startTimerUI() { if (appState.timerInterval) clearInterval(appState.timerInterval); appState.timerInterval = setInterval(() => { if (!appState.testActive || appState.reviewMode) return; if (appState.timeLeft <= 0) { clearInterval(appState.timerInterval); finishExamAuto(); } else { appState.timeLeft--; const mins = Math.floor(appState.timeLeft / 60); const secs = appState.timeLeft % 60; document.getElementById('liveTimer').innerText = `${mins}:${secs.toString().padStart(2,'0')}`; persistLocal(); } }, 1000); }
+    async function finishExamAuto() { if (appState.testActive && !appState.examSubmitted) await submitMockExam(); }
+    function renderPaletteGrid() { const grid = document.getElementById('paletteGrid'); grid.innerHTML = ''; for (let i=0; i<TOTAL_QS; i++) { const btn = document.createElement('div'); btn.className = 'pal-num'; btn.innerText = i+1; if (appState.answers[i] !== undefined) btn.classList.add('pal-answered'); else if (appState.markedSet.has(i)) btn.classList.add('pal-marked'); else if (appState.visitedSet.has(i)) btn.classList.add('pal-visited'); if (i === appState.currentIdx) btn.classList.add('pal-current'); if (appState.reviewMode && appState.answers[i] !== undefined && appState.answers[i] !== QUESTIONS[i].correct) btn.classList.add('pal-wrong-review'); btn.onclick = () => { appState.currentIdx = i; renderCurrentQuestion(); }; grid.appendChild(btn); } }
+    function renderCurrentQuestion() {
+      if ((!appState.testActive && !appState.reviewMode && !appState.examSubmitted)) return;
+      const q = QUESTIONS[appState.currentIdx];
+      appState.visitedSet.add(appState.currentIdx);
+      document.getElementById('currentQno').innerText = appState.currentIdx+1;
+      document.getElementById('questionText').innerHTML = t('text', q).replace(/\n/g, '<br>');
+      document.getElementById('sectionLabel').innerHTML = q.cat;
+      document.getElementById('chapterTagDisplay').innerHTML = `⚗️ ${q.cat}`;
+      const optsDiv = document.getElementById('optionsList');
+      optsDiv.innerHTML = '';
+      const opts = t('opts', q);
+      if (Array.isArray(opts)) {
+        opts.forEach((opt, idx) => { let extraClass = ""; if (appState.reviewMode) { if (idx === q.correct) extraClass = "correct-opt"; if (appState.answers[appState.currentIdx] === idx && idx !== q.correct) extraClass = "wrong-opt"; } else { if (appState.answers[appState.currentIdx] === idx) extraClass = "active-opt"; } const optDiv = document.createElement('div'); optDiv.className = `option-item ${extraClass}`; optDiv.innerHTML = `<div class="opt-letter">${String.fromCharCode(65+idx)}</div><div style="flex:1">${opt}</div>`; if (!appState.reviewMode) { optDiv.onclick = () => { if (appState.testActive) { if (Object.keys(appState.answers).length >= MAX_ATTEMPT && appState.answers[appState.currentIdx] === undefined) { showToast(`⚠️ Maximum ${MAX_ATTEMPT} attempts reached!`, "warning"); return; } appState.answers[appState.currentIdx] = idx; renderCurrentQuestion(); updateAttemptStats(); showToast("✅ Answer Saved", "success", 600); persistLocal(); } }; } optsDiv.appendChild(optDiv); });
+      }
+      if (appState.reviewMode) { const expDiv = document.createElement("div"); expDiv.style.marginTop = "12px"; expDiv.style.padding = "12px"; expDiv.style.borderRadius = "16px"; expDiv.style.background = "#fef3c7"; if (document.body.classList.contains('dark')) expDiv.style.background = "#1e293b"; expDiv.innerHTML = `<strong>📘 Explanation:</strong><br>${t('explanation', q)}<br><button id="exitReviewBtn" class="btn-block" style="margin-top:12px;">🔙 Exit Review</button>`; optsDiv.appendChild(expDiv); document.getElementById('exitReviewBtn')?.addEventListener('click',()=>{ appState.reviewMode=false; document.getElementById('testPanel').classList.add('hidden'); document.getElementById('resultPanel').classList.remove('hidden'); }); } renderPaletteGrid(); updateAttemptStats(); if(!appState.reviewMode) persistLocal(); }
+    function navigateQuestion(delta) { let newIdx = appState.currentIdx + delta; if (newIdx >= 0 && newIdx < TOTAL_QS) { appState.currentIdx = newIdx; renderCurrentQuestion(); } else showToast(delta>0 ? "📌 Last Question" : "📌 First Question", "info"); }
+    function showHint() { if(appState.reviewMode) return; const q = QUESTIONS[appState.currentIdx]; Swal.fire({ title: '💡 Smart Hint', html: `<div style="text-align:left;"><p><strong>Q${appState.currentIdx+1}:</strong> ${t('text', q)}</p><p>🔍 ${t('hint', q) || 'Think conceptually'}</p><p>📚 ${q.cat}</p></div>`, icon: 'info' }); }
+    function jumpToUnanswered() { for (let i=0;i<TOTAL_QS;i++) if (appState.answers[i]===undefined) { appState.currentIdx=i; renderCurrentQuestion(); showToast(`🎯 Q ${i+1}`,"info"); return; } showToast("🎉 All Attempted!","success"); }
+    function jumpToMarked() { let arr=Array.from(appState.markedSet); if(!arr.length){ showToast("⚠️ No marked questions","info"); return; } let next=arr.find(idx=>idx>appState.currentIdx)??arr[0]; appState.currentIdx=next; renderCurrentQuestion(); showToast(`🏷️ Marked Q${next+1}`,"info"); }
+    async function submitScoreToBackend(score, correct, wrong, accuracy) { try { await fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ name:appState.userName, score, correct, wrong, accuracy, testMode:'CUET_CHEM_HARD_MOCK1', testCode: CURRENT_TEST_CODE, testName: CURRENT_TEST_NAME, totalQuestions:TOTAL_QS, difficulty:'Hard', section:'Chemistry' }) }); } catch(e){} }
+    async function submitMockExam() { if(!appState.testActive) return; showLoading("⚗️ Evaluating..."); appState.testActive=false; appState.examSubmitted=true; clearInterval(appState.timerInterval); let correct=0,wrong=0; for(let i=0;i<TOTAL_QS;i++){ const ans=appState.answers[i]; if(ans!==undefined) { ans===QUESTIONS[i].correct ? correct++ : wrong++; } } const score=correct*5 - wrong*1; const accuracy=correct+wrong===0?0:((correct/(correct+wrong))*100).toFixed(1); await submitScoreToBackend(score,correct,wrong,accuracy); saveResultToStorage(score, correct, wrong, accuracy); localStorage.removeItem('cuet_chem_progress'); hideLoading(); showResultScreen(score,correct,wrong,accuracy); }
+    function showResultScreen(score,correct,wrong,acc) { document.getElementById('testPanel').classList.add('hidden'); const resDiv=document.getElementById('resultPanel'); resDiv.classList.remove('hidden'); const percentile = calculatePercentile(score); const perfTag = getPerformanceTag(score); const timeUsedSec = 2700 - appState.timeLeft; const speed = speedAnalysis(); const rankEst = estimateRank(percentile); resDiv.innerHTML=`<div class="card-header">⚗️ Chemistry Scorecard (Mock 1)</div><div style="padding:24px; text-align:center;"><div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;"><div><h3>🏆 Score</h3><span class="result-highlight">${score}</span></div><div><h3>✅ Correct</h3><span style="color:#10b981; font-size:1.8rem;">${correct}</span></div><div><h3>❌ Wrong</h3><span style="color:#ef4444; font-size:1.8rem;">${wrong}</span></div><div><h3>🎯 Accuracy</h3><span style="font-size:1.8rem;">${acc}%</span></div><div><h3>📊 Percentile</h3><span style="font-size:1.8rem; color:#0ea5e9;">${percentile}%</span></div><div><h3>📈 Est. Rank</h3><span style="font-size:1.2rem;">#${rankEst}</span></div><div><h3>⏱️ Time Used</h3><span>${formatTimeSec(timeUsedSec)}</span></div><div><h3>⚡ Speed</h3><span>${speed}</span></div></div><h3 style="margin-top:12px;">${perfTag}</h3><div class="action-row" style="margin-top:24px;"><button id="pdfReportBtn" class="action-btn primary-btn">📄 PDF Report</button><button id="sectionalAnalysisBtn" class="action-btn" style="background:#1e3a8a;color:white;">📊 Sectional</button><button id="exportFullCsvBtn" class="action-btn">📎 Full CSV</button><button id="exportWrongCsvBtn" class="action-btn">⚠️ Wrong CSV</button><button id="leaderboardResultBtn" class="action-btn" style="background:#d97706;color:white;">🏆 Leaderboard</button><button id="reviewTestBtn" class="action-btn" style="background:#0ea5e9;color:white;">🔍 Review Answers</button><button id="newTestBtn" class="action-btn">🔄 New Test</button><button id="prevResultsBtn" class="action-btn" style="background:#6366f1;color:white;">📋 My Results</button></div></div>`; 
+      document.getElementById('pdfReportBtn').onclick = () => { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.setFontSize(16); doc.text("CUET Chemistry Report (Mock 1)", 20, 20); doc.setFontSize(12); doc.text(`Name: ${appState.userName}`, 20, 35); doc.text(`Score: ${score}`, 20, 45); doc.text(`Percentile: ${percentile}%`, 20, 55); doc.save(`CUET_Chem1_Report_${appState.userName}.pdf`); };
+      document.getElementById('sectionalAnalysisBtn').onclick=()=>{ let cats={}; for(let i=0;i<TOTAL_QS;i++){ let c=QUESTIONS[i].cat; if(!cats[c]) cats[c]={c:0,w:0,u:0}; let a=appState.answers[i]; if(a!==undefined) a===QUESTIONS[i].correct?cats[c].c++:cats[c].w++; else cats[c].u++; } let html='<h3>Sectional Analysis</h3>'; for(let k in cats){ html+=`<div><strong>${k}</strong> ✅${cats[k].c} ❌${cats[k].w} ⚪${cats[k].u}</div>`; } Swal.fire({title:'Chemistry Sectional',html:`${html}<button id="closeSecBtn" class="btn-block">Close</button>`,showConfirmButton:false,didRender:()=>document.getElementById('closeSecBtn')?.addEventListener('click',()=>Swal.close())}); };
+      document.getElementById('exportFullCsvBtn').onclick=()=>exportCSV(false); document.getElementById('exportWrongCsvBtn').onclick=()=>exportCSV(true); document.getElementById('leaderboardResultBtn').onclick=()=>renderLeaderboardModal(); document.getElementById('reviewTestBtn').onclick = () => { appState.reviewMode = true; appState.testActive = false; document.getElementById('resultPanel').classList.add('hidden'); document.getElementById('testPanel').classList.remove('hidden'); renderCurrentQuestion(); }; document.getElementById('newTestBtn').onclick=()=>window.location.reload(); document.getElementById('prevResultsBtn').onclick=()=>showPreviousResults(); }
+    function showPreviousResults() {
+      const results = JSON.parse(localStorage.getItem('cuet_chem_results') || '[]');
+      if (results.length === 0) { Swal.fire('No Results', 'Complete a test to see history.', 'info'); return; }
+      let html = '<div style="max-height:400px; overflow-y:auto;"><table style="width:100%; font-size:0.8rem;"><tr><th>Date</th><th>Score</th><th>Accuracy</th></tr>';
+      results.reverse().forEach(r => { html += `<tr><td>${new Date(r.date).toLocaleDateString()}</td><td>${r.score}</td><td>${r.accuracy}%</td></tr>`; });
+      html += '</table></div><button id="closeResBtn" class="btn-block" style="margin-top:10px;">Close</button>';
+      Swal.fire({ title: `📋 Previous Results (${CURRENT_TEST_CODE})`, html, showConfirmButton: false, didRender: () => document.getElementById('closeResBtn').addEventListener('click', () => Swal.close()) });
+    }
+    function exportCSV(onlyWrong=false) { let rows=[["Q#","Question","Your Answer","Correct","Status","Topic"]]; for(let i=0;i<TOTAL_QS;i++){ const q=QUESTIONS[i]; let ua=appState.answers[i]; let uaText=ua!==undefined ? (Array.isArray(t('opts',q)) ? t('opts',q)[ua] : "NA") : "NA"; let status=ua===undefined?"Unattempted":ua===q.correct?"Correct":"Wrong"; if(onlyWrong && status!=="Wrong") continue; rows.push([i+1, t('text',q).replace(/\n/g,' '), uaText, q.correctAns, status, q.cat]); } let csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n'); const blob=new Blob(["\uFEFF"+csv],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=onlyWrong?`wrong_cuet_chem1_${appState.userName}.csv`:`full_cuet_chem1_${appState.userName}.csv`; a.click(); URL.revokeObjectURL(a.href); }
+    async function fetchLeaderboard() { try { showLoading("Leaderboard..."); const res=await fetch(`${APPS_SCRIPT_URL}?action=leaderboard&testCode=${CURRENT_TEST_CODE}`); const data=await res.json(); hideLoading(); return Array.isArray(data)?data:[]; } catch(e){ hideLoading(); return []; } }
+    async function renderLeaderboardModal() { let data=await fetchLeaderboard(); if(!data.length) data=[{name:"Chem Champ",score:200},{name:"CUET Aspirant",score:180}]; data.sort((a,b)=>b.score-a.score); let top50 = data.slice(0,50); let html=`<div><h3>⚗️ Chemistry Leaderboard (Mock 1)</h3><div style="max-height:400px; overflow-y:auto;"><table style="width:100%; border-collapse:collapse;"><tr><th>Rank</th><th>Name</th><th>Score</th></tr>`; top50.forEach((e,i)=>html+=`<tr><td>${i+1}</td><td>${e.name||"Anonymous"}</td><td>${e.score}</td></tr>`); html+=`</table></div><button id="closeLBGlobal" class="btn-block" style="margin-top:12px;">Close</button></div>`; Swal.fire({title:'',html,showConfirmButton:false,didRender:()=>document.getElementById('closeLBGlobal')?.addEventListener('click',()=>Swal.close())}); }
+    function init() {
+      document.getElementById('darkModeToggle').onclick=()=>{ document.body.classList.toggle('dark'); document.getElementById('darkModeToggle').innerHTML=document.body.classList.contains('dark')?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>'; };
+      document.getElementById('langHiBtn').onclick=()=>{ appState.currentLang='hi'; document.getElementById('langHiBtn').classList.add('active-lang'); document.getElementById('langEnBtn').classList.remove('active-lang'); if(appState.testActive || appState.reviewMode) renderCurrentQuestion(); };
+      document.getElementById('langEnBtn').onclick=()=>{ appState.currentLang='en'; document.getElementById('langEnBtn').classList.add('active-lang'); document.getElementById('langHiBtn').classList.remove('active-lang'); if(appState.testActive || appState.reviewMode) renderCurrentQuestion(); };
+      let startX = 0; let swipeThreshold = 50; document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }); document.addEventListener('touchend', e => { if (!appState.testActive || appState.reviewMode) return; let dx = e.changedTouches[0].clientX - startX; if (Math.abs(dx) > swipeThreshold) { if (dx > 0) navigateQuestion(-1); else navigateQuestion(1); } });
+      document.getElementById('proceedToInstBtn').onclick=()=>{ const name=document.getElementById('candidateNameField').value.trim(); if(!name){ showToast("⚠️ Please enter name/roll no.","warning"); return; } appState.userName=name; localStorage.setItem('cuet_chem_user',name); document.getElementById('headerNameDisplay').innerHTML=`<i class="fas fa-user"></i> ${name.substring(0,15)}`; document.getElementById('welcomePanel').classList.add('hidden'); document.getElementById('instructionsPanel').classList.remove('hidden'); };
+      document.getElementById('confirmStartExam').onclick=()=>{ appState.testActive=true; appState.examSubmitted=false; appState.reviewMode=false; appState.answers={}; appState.markedSet.clear(); appState.visitedSet.clear(); appState.currentIdx=0; appState.timeLeft=45*60; localStorage.removeItem('cuet_chem_progress'); document.getElementById('welcomePanel').classList.add('hidden'); document.getElementById('instructionsPanel').classList.add('hidden'); document.getElementById('testPanel').classList.remove('hidden'); startTimerUI(); renderCurrentQuestion(); updateAttemptStats(); };
+      document.getElementById('backToWelcomeBtn').onclick=()=>{ document.getElementById('welcomePanel').classList.remove('hidden'); document.getElementById('instructionsPanel').classList.add('hidden'); };
+      document.getElementById('prevQMobile').onclick=()=>navigateQuestion(-1); document.getElementById('nextQMobile').onclick=()=>navigateQuestion(1); document.getElementById('markReviewMobile').onclick=()=>{ if(appState.testActive && !appState.reviewMode){ appState.markedSet.has(appState.currentIdx)?appState.markedSet.delete(appState.currentIdx):appState.markedSet.add(appState.currentIdx); renderPaletteGrid(); } }; document.getElementById('hintBtnMobile').onclick=()=>showHint(); document.getElementById('clearMobile').onclick=()=>{ if(appState.testActive && !appState.reviewMode){ delete appState.answers[appState.currentIdx]; renderCurrentQuestion(); updateAttemptStats(); } }; document.getElementById('saveAndNextMobile').onclick=()=>{ if(appState.answers[appState.currentIdx]!==undefined) navigateQuestion(1); else showToast("⚠️ Please select an option","error"); }; document.getElementById('finalSubmitTestBtn').onclick=()=>{ if(appState.testActive) Swal.fire({ title:"Submit Exam?", text:"You cannot edit after submission.", icon:"question", showCancelButton:true }).then(r=>{ if(r.isConfirmed) submitMockExam(); }); }; document.getElementById('pauseSaveBtn').onclick=()=>{ persistLocal(); showToast("💾 Progress Saved","success"); }; document.getElementById('fullScreenBtn').onclick=()=>{ if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }; document.getElementById('quickNavBtn').onclick=()=>jumpToUnanswered(); document.getElementById('jumpMarkedBtn').onclick=()=>jumpToMarked(); document.getElementById('viewLiveLeaderboardBtn').onclick=()=>renderLeaderboardModal(); document.getElementById('resumeMockBtn').onclick=()=>{ const saved=localStorage.getItem('cuet_chem_progress'); if(saved){ const d=JSON.parse(saved); appState.answers=d.answers; appState.markedSet=new Set(d.marked); appState.visitedSet=new Set(d.visited); appState.currentIdx=d.currentIdx; appState.timeLeft=d.timeLeft; appState.userName=d.userName; appState.currentLang=d.currentLang||'hi'; appState.testActive=true; appState.reviewMode=false; document.getElementById('headerNameDisplay').innerHTML=`<i class="fas fa-user"></i> ${appState.userName.substring(0,15)}`; document.getElementById('welcomePanel').classList.add('hidden'); document.getElementById('testPanel').classList.remove('hidden'); renderCurrentQuestion(); startTimerUI(); updateAttemptStats(); } else showToast("⚠️ No saved progress","error"); }; document.getElementById('quickStatsBtn').onclick = () => showPreviousResults(); document.getElementById('floatPrevBtn').onclick=()=>navigateQuestion(-1); document.getElementById('floatNextBtn').onclick=()=>navigateQuestion(1);
+      loadSavedProgress(); if(appState.userName){ document.getElementById('headerNameDisplay').innerHTML=`<i class="fas fa-user"></i> ${appState.userName.substring(0,15)}`; document.getElementById('candidateNameField').value=appState.userName; }
+    }
+    init();
+  })();
+</script>
+</body>
+</html>
