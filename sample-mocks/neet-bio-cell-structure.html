@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEET Biology - Cell Structure & Function</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .test-header {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 184, 148, 0.3);
+        }
+        
+        .test-header h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+        
+        .test-header p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        
+        .test-header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 13px;
+        }
+        
+        .info-box {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .info-item .icon {
+            font-size: 20px;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid #00b894;
+            transition: all 0.3s;
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            transform: translateX(3px);
+        }
+        
+        .question-number {
+            background: #00b894;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .question-text {
+            color: #2d3436;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            color: #495057;
+        }
+        
+        .option-item:hover {
+            background: #e8f8f5;
+            border-color: #00b894;
+            transform: translateY(-2px);
+        }
+        
+        .option-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #00b894;
+            flex-shrink: 0;
+        }
+        
+        .option-item label {
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .option-letter {
+            font-weight: 700;
+            color: #00b894;
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .test-header h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <!-- Header -->
+        <div class="test-header">
+            <h2>🧬 NEET Biology Mock Test</h2>
+            <p>Cell Structure & Function</p>
+            <div>
+                <span class="badge">📚 NEET</span>
+                <span class="badge">🔬 Biology</span>
+                <span class="badge">🧫 Cell Biology</span>
+            </div>
+        </div>
+        
+        <!-- Info Box -->
+        <div class="info-box">
+            <div class="info-item">
+                <span class="icon">📝</span>
+                <span>5 Questions</span>
+            </div>
+            <div class="info-item">
+                <span class="icon">⏱️</span>
+                <span>10 Minutes</span>
+            </div>
+            <div class="info-item">
+                <span class="icon">🎯</span>
+                <span>NEET Pattern</span>
+            </div>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question-card">
+            <div class="question-number">1</div>
+            <div class="question-text">
+                Which of the following is known as the "powerhouse of the cell"?
+            </div>
+            <div class="options-grid">
+                <div class="option-item">
+                    <input type="radio" name="q1" value="A" id="q1a">
+                    <label for="q1a"><span class="option-letter">A)</span> Nucleus</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q1" value="B" id="q1b">
+                    <label for="q1b"><span class="option-letter">B)</span> Mitochondria</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q1" value="C" id="q1c">
+                    <label for="q1c"><span class="option-letter">C)</span> Ribosome</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q1" value="D" id="q1d">
+                    <label for="q1d"><span class="option-letter">D)</span> Golgi apparatus</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-card">
+            <div class="question-number">2</div>
+            <div class="question-text">
+                The cell wall of bacteria is made up of:
+            </div>
+            <div class="options-grid">
+                <div class="option-item">
+                    <input type="radio" name="q2" value="A" id="q2a">
+                    <label for="q2a"><span class="option-letter">A)</span> Cellulose</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q2" value="B" id="q2b">
+                    <label for="q2b"><span class="option-letter">B)</span> Chitin</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q2" value="C" id="q2c">
+                    <label for="q2c"><span class="option-letter">C)</span> Peptidoglycan</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q2" value="D" id="q2d">
+                    <label for="q2d"><span class="option-letter">D)</span> Hemicellulose</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-card">
+            <div class="question-number">3</div>
+            <div class="question-text">
+                Which organelle is responsible for protein synthesis in a cell?
+            </div>
+            <div class="options-grid">
+                <div class="option-item">
+                    <input type="radio" name="q3" value="A" id="q3a">
+                    <label for="q3a"><span class="option-letter">A)</span> Lysosome</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q3" value="B" id="q3b">
+                    <label for="q3b"><span class="option-letter">B)</span> Ribosome</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q3" value="C" id="q3c">
+                    <label for="q3c"><span class="option-letter">C)</span> Peroxisome</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q3" value="D" id="q3d">
+                    <label for="q3d"><span class="option-letter">D)</span> Centrosome</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-card">
+            <div class="question-number">4</div>
+            <div class="question-text">
+                The fluid mosaic model describes the structure of:
+            </div>
+            <div class="options-grid">
+                <div class="option-item">
+                    <input type="radio" name="q4" value="A" id="q4a">
+                    <label for="q4a"><span class="option-letter">A)</span> Cell membrane</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q4" value="B" id="q4b">
+                    <label for="q4b"><span class="option-letter">B)</span> Cell wall</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q4" value="C" id="q4c">
+                    <label for="q4c"><span class="option-letter">C)</span> Nucleus</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q4" value="D" id="q4d">
+                    <label for="q4d"><span class="option-letter">D)</span> Cytoplasm</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-card">
+            <div class="question-number">5</div>
+            <div class="question-text">
+                Which of the following is NOT a double membrane-bound organelle?
+            </div>
+            <div class="options-grid">
+                <div class="option-item">
+                    <input type="radio" name="q5" value="A" id="q5a">
+                    <label for="q5a"><span class="option-letter">A)</span> Mitochondria</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q5" value="B" id="q5b">
+                    <label for="q5b"><span class="option-letter">B)</span> Chloroplast</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q5" value="C" id="q5c">
+                    <label for="q5c"><span class="option-letter">C)</span> Nucleus</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" name="q5" value="D" id="q5d">
+                    <label for="q5d"><span class="option-letter">D)</span> Lysosome</label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ⚠️ REQUIRED: calculateScore function -->
+    <script>
+        function calculateScore() {
+            // Correct answers for NEET Biology Cell Structure
+            const correctAnswers = {
+                q1: 'B',  // Mitochondria - powerhouse of the cell
+                q2: 'C',  // Peptidoglycan - bacterial cell wall
+                q3: 'B',  // Ribosome - protein synthesis
+                q4: 'A',  // Cell membrane - fluid mosaic model
+                q5: 'D'   // Lysosome - single membrane organelle
+            };
+            
+            let score = 0;
+            const total = Object.keys(correctAnswers).length;
+            
+            for (let question in correctAnswers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                }
+            }
+            
+            return {
+                score: score,
+                total: total
+            };
+        }
+    </script>
+</body>
+  </html>
