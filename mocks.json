@@ -31,4 +31,21 @@
         "testName": "Ancient History Mock 1",
         "testCode": "UPSC-HIS-ANC-01"
     }
+][
+    {
+        "file": "sample-mocks/mock1.html",
+        "exam": "SSC",
+        "subject": "Math",
+        "chapter": "Algebra",
+        "testName": "Algebra Basics Test 1",
+        "testCode": "SSC-MATH-ALG-01"
+    },
+    {
+        "file": "sample-mocks/neet-bio-cell-structure.html",
+        "exam": "NEET",
+        "subject": "Biology",
+        "chapter": "Cell Structure",
+        "testName": "Cell Structure & Function",
+        "testCode": "NEET-BIO-CELL-01"
+    }
 ]
