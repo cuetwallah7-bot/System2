@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Mock Test Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar h2 {
+            font-size: 20px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-info span {
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .welcome-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .welcome-section h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .welcome-section p {
+            color: #666;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group select {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .filter-group select:focus {
+            border-color: #667eea;
+        }
+        
+        .mock-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .mock-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border-left: 4px solid #667eea;
+        }
+        
+        .mock-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .mock-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .mock-card .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .mock-card .badge {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .mock-card .test-code {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .mock-card .btn-start {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .mock-card .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .no-tests {
+            text-align: center;
+            padding: 50px;
+            color: #999;
+            font-size: 18px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .tab-btn {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .results-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .results-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .results-table th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .results-table td {
+            padding: 15px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .results-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+            }
+            
+            .mock-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h2>📚 Mock Test Platform</h2>
+        <div class="user-info">
+            <span id="welcomeUser">Welcome!</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('tests')">Available Tests</button>
+            <button class="tab-btn" onclick="switchTab('myresults')">My Results</button>
+        </div>
+        
+        <div id="testsSection">
+            <div class="filter-section">
+                <div class="filter-group">
+                    <select id="examFilter" onchange="filterMocks()">
+                        <option value="">All Exams</option>
+                    </select>
+                    <select id="subjectFilter" onchange="filterMocks()">
+                        <option value="">All Subjects</option>
+                    </select>
+                    <select id="chapterFilter" onchange="filterMocks()">
+                        <option value="">All Chapters</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mock-list" id="mockList">
+                <div class="no-tests">Loading tests...</div>
+            </div>
+        </div>
+        
+        <div id="resultsSection" style="display: none;">
+            <div class="results-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Test Code</th>
+                            <th>Score</th>
+                            <th>Accuracy</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <tr>
+                            <td colspan="4" style="text-align: center;">No attempts yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyvMjjZW8VhupLm7fawJzviuT2MX3jABP3glXICcedRQlw-387mauydpFJtOXIel7rOWA/exec'; // Replace with your deployed URL
+        let allMocks = [];
+        let userResults = [];
+        
+        // Check authentication
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            window.location.href = 'index.html';
+        }
+        
+        document.getElementById('welcomeUser').textContent = `Welcome, ${user.name}`;
+        
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+        
+        function switchTab(tab) {
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            
+            if (tab === 'tests') {
+                buttons[0].classList.add('active');
+                document.getElementById('testsSection').style.display = 'block';
+                document.getElementById('resultsSection').style.display = 'none';
+            } else {
+                buttons[1].classList.add('active');
+                document.getElementById('testsSection').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'block';
+                loadUserResults();
+            }
+        }
+        
+        // Load mocks from JSON file
+        async function loadMocks() {
+            try {
+                const response = await fetch('mocks.json');
+                allMocks = await response.json();
+                populateFilters();
+                displayMocks(allMocks);
+            } catch (error) {
+                document.getElementById('mockList').innerHTML = '<div class="no-tests">Error loading tests. Please try again.</div>';
+            }
+        }
+        
+        function populateFilters() {
+            const exams = [...new Set(allMocks.map(m => m.exam))];
+            const examFilter = document.getElementById('examFilter');
+            exams.forEach(exam => {
+                const option = document.createElement('option');
+                option.value = exam;
+                option.textContent = exam;
+                examFilter.appendChild(option);
+            });
+        }
+        
+        function filterMocks() {
+            const exam = document.getElementById('examFilter').value;
+            const subject = document.getElementById('subjectFilter').value;
+            const chapter = document.getElementById('chapterFilter').value;
+            
+            // Update subject filter based on exam
+            if (exam) {
+                const subjects = [...new Set(allMocks.filter(m => m.exam === exam).map(m => m.subject))];
+                const subjectFilter = document.getElementById('subjectFilter');
+                subjectFilter.innerHTML = '<option value="">All Subjects</option>';
+                subjects.forEach(s => {
+                    const option = document.createElement('option');
+                    option.value = s;
+                    option.textContent = s;
+                    subjectFilter.appendChild(option);
+                });
+            }
+            
+            // Update chapter filter based on exam and subject
+            if (exam && subject) {
+                const chapters = [...new Set(allMocks.filter(m => m.exam === exam && m.subject === subject).map(m => m.chapter))];
+                const chapterFilter = document.getElementById('chapterFilter');
+                chapterFilter.innerHTML = '<option value="">All Chapters</option>';
+                chapters.forEach(c => {
+                    const option = document.createElement('option');
+                    option.value = c;
+                    option.textContent = c;
+                    chapterFilter.appendChild(option);
+                });
+            }
+            
+            let filtered = allMocks;
+            if (exam) filtered = filtered.filter(m => m.exam === exam);
+            if (subject) filtered = filtered.filter(m => m.subject === subject);
+            if (chapter) filtered = filtered.filter(m => m.chapter === chapter);
+            
+            displayMocks(filtered);
+        }
+        
+        function displayMocks(mocks) {
+            const container = document.getElementById('mockList');
+            
+            if (mocks.length === 0) {
+                container.innerHTML = '<div class="no-tests">No tests found</div>';
+                return;
+            }
+            
+            container.innerHTML = mocks.map(mock => `
+                <div class="mock-card">
+                    <h3>${mock.testName}</h3>
+                    <div class="meta">
+                        <span class="badge">${mock.exam}</span>
+                        <span class="badge">${mock.subject}</span>
+                        <span class="badge">${mock.chapter}</span>
+                    </div>
+                    <div class="test-code">Code: ${mock.testCode}</div>
+                    <button class="btn-start" onclick="startTest('${mock.file}', '${mock.testCode}')">
+                        Start Test
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        function startTest(file, testCode) {
+            window.location.href = `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(testCode)}`;
+        }
+        
+        async function loadUserResults() {
+            try {
+                const response = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    userResults = data.results;
+                    displayResults(userResults);
+                }
+            } catch (error) {
+                console.error('Error loading results:', error);
+            }
+        }
+        
+        function displayResults(results) {
+            const tbody = document.getElementById('resultsBody');
+            
+            if (results.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No attempts yet</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = results.map(r => `
+                <tr>
+                    <td><strong>${r.testCode}</strong></td>
+                    <td>${r.score}</td>
+                    <td>${r.accuracy}%</td>
+                    <td>${r.date}</td>
+                </tr>
+            `).join('');
+        }
+        
+        // Initial load
+        loadMocks();
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Mock Test Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        .test-header {
+            background: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .test-header h2 {
+            color: #333;
+        }
+        
+        .timer {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .test-frame {
+            width: 100%;
+            height: calc(100vh - 200px);
+            border: none;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .submit-section {
+            text-align: center;
+            margin-top: 20px;
+            padding-bottom: 30px;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h2 id="testTitle">Loading Test...</h2>
+        <div class="timer" id="timer">--:--</div>
+    </div>
+    
+    <div class="container">
+        <iframe id="testFrame" class="test-frame"></iframe>
+        <div class="submit-section">
+            <button class="btn-submit" onclick="submitTest()">Submit Test</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyvMjjZW8VhupLm7fawJzviuT2MX3jABP3glXICcedRQlw-387mauydpFJtOXIel7rOWA/exec'; // Replace with your deployed URL
+        
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            window.location.href = 'index.html';
+        }
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const mockFile = urlParams.get('file');
+        const testCode = urlParams.get('testCode');
+        
+        if (!mockFile || !testCode) {
+            alert('Invalid test URL');
+            window.location.href = 'dashboard.html';
+        }
+        
+        document.getElementById('testTitle').textContent = `Test: ${testCode}`;
+        
+        // Load mock HTML in iframe
+        const testFrame = document.getElementById('testFrame');
+        testFrame.src = mockFile;
+        
+        // Optional timer (you can set duration in mock HTML)
+        let timeLeft = 3600; // 60 minutes default
+        
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                submitTest();
+            }
+        }
+        
+        updateTimer();
+        
+        async function submitTest() {
+            if (!confirm('Are you sure you want to submit the test?')) {
+                return;
+            }
+            
+            try {
+                // Get score from iframe
+                const iframeWindow = testFrame.contentWindow;
+                let score = 0;
+                let totalQuestions = 0;
+                
+                // Try to get score from iframe's calculateScore function
+                if (iframeWindow && iframeWindow.calculateScore) {
+                    const result = iframeWindow.calculateScore();
+                    score = result.score;
+                    totalQuestions = result.total;
+                } else {
+                    alert('Unable to calculate score. Please make sure the test has a calculateScore function.');
+                    return;
+                }
+                
+                const accuracy = totalQuestions > 0 ? ((score / totalQuestions) * 100).toFixed(2) : 0;
+                const date = new Date().toISOString().split('T')[0];
+                
+                // Submit result
+                const response = await fetch(
+                    `${API_URL}?action=submitResult&username=${encodeURIComponent(user.username)}&name=${encodeURIComponent(user.name)}&testCode=${encodeURIComponent(testCode)}&score=${score}&accuracy=${accuracy}&date=${date}`
+                );
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = `result.html?score=${score}&total=${totalQuestions}&accuracy=${accuracy}&testCode=${encodeURIComponent(testCode)}`;
+                } else {
+                    alert('Failed to submit result. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error submitting test. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

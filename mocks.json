@@ -1,0 +1,34 @@
+[
+    {
+        "file": "sample-mocks/mock1.html",
+        "exam": "SSC",
+        "subject": "Math",
+        "chapter": "Algebra",
+        "testName": "Algebra Basics Test 1",
+        "testCode": "SSC-MATH-ALG-01"
+    },
+    {
+        "file": "sample-mocks/mock2.html",
+        "exam": "SSC",
+        "subject": "Math",
+        "chapter": "Algebra",
+        "testName": "Algebra Advanced Test 2",
+        "testCode": "SSC-MATH-ALG-02"
+    },
+    {
+        "file": "sample-mocks/mock3.html",
+        "exam": "SSC",
+        "subject": "English",
+        "chapter": "Grammar",
+        "testName": "Grammar Practice Test",
+        "testCode": "SSC-ENG-GRM-01"
+    },
+    {
+        "file": "sample-mocks/mock4.html",
+        "exam": "UPSC",
+        "subject": "History",
+        "chapter": "Ancient India",
+        "testName": "Ancient History Mock 1",
+        "testCode": "UPSC-HIS-ANC-01"
+    }
+]
